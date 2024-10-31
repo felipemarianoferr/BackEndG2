@@ -42,5 +42,4 @@ public class InscricaoService {
     public Inscricao getInscricaoByEvento(String eventid) {
         return inscricaoRepository.findByEvento(eventid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
-
 }

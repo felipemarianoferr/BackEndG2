@@ -21,4 +21,5 @@ public class Inscricao {
 
     public Inscricao(String user, String event) {
     }
+
 }

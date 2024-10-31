@@ -1,5 +1,7 @@
 package backend.proj1g2.usuario;
 
+import backend.proj1g2.Inscricoes.Inscricao;
+import backend.proj1g2.Inscricoes.InscricaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private InscricaoService inscricaoService;
 
     public RetornarUsuarioDTO cadastraUsuario(CadastraUsuarioDTO dto) {
 
@@ -45,9 +50,11 @@ public class UsuarioService {
     }
 
     public void excluirUsuario(String id){
-        Usuario usuario = buscarUsuario(id);
-        usuarioRepository.delete(usuario);
-//      Preciso verificar se o usuario nunca se inscreveu em um evento
-//      para deletar o usuario
+
+        Inscricao inscricao = inscricaoService.getInscricaoByUsuario(id);
+        if (inscricao == null){
+            Usuario usuario = buscarUsuario(id);
+            usuarioRepository.delete(usuario);
+        }
     }
 }
