@@ -1,9 +1,13 @@
 package backend.proj1g2.Inscricoes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+
 
 @Service
 public class InscricaoService {
@@ -12,34 +16,46 @@ public class InscricaoService {
     private InscricaoRepository inscricaoRepository;
 
 
-    public Inscricao createInscricao(Inscricao inscricao) {
-        return inscricaoRepository.save(inscricao);
+
+    // CREATE
+    public InscricaoDTO createInscricao(createInscricaoDTO dto) {
+        Inscricao inscricao = new Inscricao(dto.usuario(), dto.evento());
+        inscricao.setActive(true);
+        Inscricao inscricao_ = inscricaoRepository.save(inscricao);
+        return NormParaDto(inscricao_.getId());
     }
 
-    public Inscricao deleteInscricaoById(String id) {
-        inscricaoRepository.deleteById(id);
-        return getInscricaoById(id);
+
+
+    // GET
+    public InscricaoDTO getInscricaoById(String id) {
+
+        Inscricao inscricao =  inscricaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return NormParaDto(inscricao.getId());
     }
 
-    public Inscricao deleteInscricaoByUsuario(String userid) {
-        inscricaoRepository.deleteByUsuario(userid);
-        return getInscricaoByUsuario(userid);
+    public Page<Inscricao> getInscricaoByUsuario(String userid, Pageable pageable) {
+        return inscricaoRepository.findByUsuario(userid, pageable);      // .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public Inscricao deleteInscricaoByEvento(String eventid) {
-        inscricaoRepository.deleteByEvento(eventid);
-        return getInscricaoByEvento(eventid);
+    public Page<Inscricao> getInscricaoByEvento(String eventid, Pageable pageable) {
+        return inscricaoRepository.findByEvento(eventid, pageable);      //.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public Inscricao getInscricaoById(String id) {
-        return inscricaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public Page<Inscricao> getAllInscricoes(Pageable pageable) {
+        return inscricaoRepository.findAll(pageable);
     }
 
-    public Inscricao getInscricaoByUsuario(String userid) {
-        return inscricaoRepository.findByUsuario(userid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    // ATIVAR / DESATIVAR
+    public InscricaoDTO deleteInscricao(String id) {
+        Inscricao inscricao = inscricaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        inscricao.setActive(!inscricao.getActive());
+        return NormParaDto(inscricao.getId());
     }
 
-    public Inscricao getInscricaoByEvento(String eventid) {
-        return inscricaoRepository.findByEvento(eventid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public InscricaoDTO NormParaDto(String id) {
+        Inscricao inscricao = inscricaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return new InscricaoDTO(inscricao.getId(), inscricao.getUser(), inscricao.getEvent(), inscricao.getActive());
     }
 }
