@@ -19,6 +19,8 @@ public class Inscricao {
     @NotEmpty
     private String event;
 
+    private Boolean active;
+
     public Inscricao(String user, String event) {
     }
 }
