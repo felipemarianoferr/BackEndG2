@@ -49,9 +49,9 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public void excluirUsuario(String id){
+    public void excluirUsuario(String id, Pageable pageable){
 
-        Inscricao inscricao = inscricaoService.getInscricaoByUsuario(id);
+        Page<Inscricao> inscricao = inscricaoService.getInscricaoByUsuario(id, pageable);
         if (inscricao == null){
             Usuario usuario = buscarUsuario(id);
             usuarioRepository.delete(usuario);
