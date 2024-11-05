@@ -32,4 +32,9 @@ public class UsuarioController {
         usuarioService.excluirUsuario(id);
     }
 
+    @GetMapping("/total-pages")
+    public int contarPaginas(@RequestParam(required = false) String nome, Pageable pageable) {
+        Page<Usuario> page = usuarioService.listarUsuarios(nome, pageable);
+        return page.getTotalPages();  // This will return the total number of pages
+    }
 }
