@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/inscricoes")
+@RequestMapping("/projeto/v1/inscricoes")
 public class InscricaoController {
 
     @Autowired
