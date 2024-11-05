@@ -19,7 +19,9 @@ public class InscricaoService {
 
     // CREATE
     public InscricaoDTO createInscricao(createInscricaoDTO dto) {
-        Inscricao inscricao = new Inscricao(dto.usuario(), dto.evento());
+        Inscricao inscricao = new Inscricao();
+        inscricao.setUsuario(dto.usuario());
+        inscricao.setEvento(dto.evento());
         inscricao.setActive(true);
         Inscricao inscricao_ = inscricaoRepository.save(inscricao);
         return NormParaDto(inscricao_.getId());
@@ -56,6 +58,6 @@ public class InscricaoService {
 
     public InscricaoDTO NormParaDto(String id) {
         Inscricao inscricao = inscricaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return new InscricaoDTO(inscricao.getId(), inscricao.getUser(), inscricao.getEvent(), inscricao.getActive());
+        return new InscricaoDTO(inscricao.getId(), inscricao.getUsuario(), inscricao.getEvento(), inscricao.getActive());
     }
 }
