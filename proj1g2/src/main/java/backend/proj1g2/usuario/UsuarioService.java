@@ -52,7 +52,7 @@ public class UsuarioService {
     public void excluirUsuario(String id, Pageable pageable){
 
         Page<Inscricao> inscricao = inscricaoService.getInscricaoByUsuario(id, pageable);
-        if (inscricao == null){
+        if (inscricao.isEmpty()){
             Usuario usuario = buscarUsuario(id);
             usuarioRepository.delete(usuario);
         }
