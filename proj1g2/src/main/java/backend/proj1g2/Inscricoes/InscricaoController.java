@@ -1,5 +1,6 @@
 package backend.proj1g2.Inscricoes;
 
+import backend.proj1g2.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,5 +55,11 @@ public class InscricaoController {
     @ResponseStatus(HttpStatus.OK)
     public InscricaoDTO toggleInscricaoStatus(@PathVariable String id) {
         return inscricaoService.deleteInscricao(id);
+    }
+
+    @GetMapping("/total-pages")
+    public int contarPaginas(@RequestParam(required = false) String id, Pageable pageable) {
+        Page<Inscricao> page = inscricaoService.getInscricaoByUsuario(id, pageable);
+        return page.getTotalPages();  // This will return the total number of pages
     }
 }

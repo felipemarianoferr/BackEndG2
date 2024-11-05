@@ -28,8 +28,8 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirUsuario(@PathVariable String id) {
-        usuarioService.excluirUsuario(id);
+    public void excluirUsuario(@PathVariable String id, Pageable pageable) {
+        usuarioService.excluirUsuario(id, pageable);
     }
 
     @GetMapping("/total-pages")
